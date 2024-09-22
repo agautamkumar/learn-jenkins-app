@@ -1,11 +1,22 @@
-pipeline{
+pipeline {
     agent any
 
-    stages{
-        steps{
-            stage('Build'){
+    stages {
+        stage('Build') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
                 sh '''
-                        echo "git connection is successful"
+                    ls -la
+                    node --version
+                    npm --version
+                    npm ci
+                    npm run build
+                    ls -la
                 '''
             }
         }
